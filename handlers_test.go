@@ -141,7 +141,7 @@ func TestPostTape(t *testing.T) {
 	// Test adding a tape which already exists in the tapes slice
 	w2 := httptest.NewRecorder()
 	request2 := tape{
-		ID:       "6",
+		ID:       "7",
 		Title:    "A torinói ló",
 		Director: "Tarr Béla",
 		Genre:    "Drama",
@@ -162,5 +162,5 @@ func TestPostTape(t *testing.T) {
 	assert.Equal(t, 6, len(tapes))
 	assert.Equal(t, 2, tapes[5].Quantity)
 	assert.Equal(t, fmt.Sprintf("The title, \"%s\", is already in the catalog. We now have %d units in stock.", tapes[5].Title, tapes[5].Quantity), response2["message"])
-	// fmt.Println("Message: ", response2["message"])
+	fmt.Println("Message: ", response2["message"])
 }
