@@ -28,8 +28,8 @@ func main() {
 	router := gin.Default()
 
 	// TODO: Add health handler. Read the MVC link that Péter sent me
+
 	router.GET("/tapes", getTapes)
-	// NOTE: Gin only allows 1 wildcard per path ??
 	router.GET("/tapes/:id", getTapeByID)
 	router.POST("/tapes", postTape)
 
@@ -45,7 +45,6 @@ func getTapes(c *gin.Context) {
 		filtered := filterGenres(genre)
 		if filtered == nil {
 			c.IndentedJSON(http.StatusNotFound, gin.H{
-				// TODO: Check if the gin gonic lib has dedicated functions for Sprintf of this kind
 				"message": fmt.Sprintf("we currently have no %s movies available", genre),
 			})
 			return
@@ -86,6 +85,7 @@ func getTapeByID(c *gin.Context) {
 func postTape(c *gin.Context) {
 	var newTape tape
 	if err := c.BindJSON(&newTape); err != nil {
+		c.IndentedJSON(http.StatusOK, gin.H{"message": "error binding object"})
 		return
 	}
 
@@ -107,7 +107,8 @@ func postTape(c *gin.Context) {
 // Helper for the postTape function
 func tapeExists(newTape tape) (bool, int) {
 	for i := range tapes {
-		if newTape.Title == tapes[i].Title {
+		if newTape.Title == tapes[i].Title &&
+			newTape.Director == tapes[i].Director {
 			// TODO: increment quantity in the DB! For now, increment directly and return to respond with message.
 			tapes[i].Quantity += 1
 			return true, tapes[i].Quantity
