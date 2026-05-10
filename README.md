@@ -291,7 +291,7 @@ If you prefer to run the services directly on your machine for development purpo
 |--------|----------|-------------|
 | POST | `/api/users/login` | Authenticate and receive JWT token |
 
-> **Note:** User accounts are pre-created via SQL seed scripts. There is no public registration endpoint. See the [Database Seeding](#database-seeding) section for default credentials.
+> **Note:** User accounts are pre-created via SQL seed scripts. There is no public registration endpoint. However, admin users can create new accounts individually or in batches through the [User Management Endpoints](#user-management-endpoints-admin). See the [Database Seeding](#database-seeding) section for default credentials.
 
 ### Tapes Endpoints
 
@@ -326,7 +326,7 @@ If you prefer to run the services directly on your machine for development purpo
 
 ## Database Seeding
 
-The application does not have a public user registration endpoint. Instead, users are pre-created via SQL seed scripts. The **same `sql/seed.sql` file** is used for both Docker and local development, ensuring consistency across environments. The database is automatically populated with sample data when using Docker Compose, or you can manually apply the seed script for local development.
+The application does not have a public user registration endpoint. Instead, users are pre-created via SQL seed scripts. Additional users can be created by an admin via the [User Management Endpoints](#user-management-endpoints-admin) (individually or in batches). The **same `sql/seed.sql` file** is used for both Docker and local development, ensuring consistency across environments. The database is automatically populated with sample data when using Docker Compose, or you can manually apply the seed script for local development.
 
 ### Default Credentials
 
