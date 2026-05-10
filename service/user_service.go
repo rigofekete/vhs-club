@@ -36,6 +36,7 @@ func (s *userService) CreateUser(ctx context.Context, user *model.User) (*model.
 	if err != nil {
 		return nil, err
 	}
+	user.Password = ""
 	user.HashedPassword = hashedPassword
 	return s.repo.Save(ctx, user)
 }
@@ -46,6 +47,7 @@ func (s *userService) CreateUserBatch(ctx context.Context, users []*model.User) 
 		if err != nil {
 			return nil, nil, err
 		}
+		user.Password = ""
 		user.HashedPassword = hashedPassword
 	}
 	return s.repo.SaveBatch(ctx, users)
