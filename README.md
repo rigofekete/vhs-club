@@ -16,6 +16,8 @@
 
 ---
 
+<img alt="vhs-club header" src="docs/assets/vhs-header2-1080p.gif" />
+
 ## Overview
 
 VHS Club is a Linux full-stack web application for a fictional VHS movie rental service. Users can browse a catalog of classic VHS movies and rent their favorite titles. The application comes with pre-created users and an admin account loaded from SQL seed scripts.
@@ -342,15 +344,15 @@ The following accounts are available after seeding:
 
 The seed script also populates the catalog with classic VHS movies:
 
-| Title | Director | Genre | Quantity | 
+| Title | Director | Genre | Quantity |
 |-------|----------|-------|----------|
-| Amarcord | Federico Fellini | Drama | 1 | 
+| Amarcord | Federico Fellini | Drama | 1 |
 | Taxi Driver | Martin Scorsese | Thriller | 2 |
-| Back to the Future | Robert Zemeckis | Adventure | 5 | 
-| Alien | Ridley Scott | Horror | 10 | 
-| A torinói ló | Béla Tarr | Drama | 3 | 
-| Batman | Tim Burton | Action | 4 | 
-| Fitzcarraldo | Werner Herzog | Drama | 11 | 
+| Back to the Future | Robert Zemeckis | Adventure | 5 |
+| Alien | Ridley Scott | Horror | 10 |
+| A torinói ló | Béla Tarr | Drama | 3 |
+| Batman | Tim Burton | Action | 4 |
+| Fitzcarraldo | Werner Herzog | Drama | 11 |
 
 ### Seeding with Docker Compose
 
