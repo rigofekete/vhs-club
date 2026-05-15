@@ -70,10 +70,10 @@ VHS Club is a Linux full-stack web application for a fictional VHS movie rental 
 ### Screenshots
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/08cd0299-bfd7-4f71-9be9-ac845c8ac387" alt="Home Page" width="410"/>
+  <img src="https://github.com/user-attachments/assets/08cd0299-bfd7-4f71-9be9-ac845c8ac387" alt="Home Page" />
 </p>
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/25700c50-fed4-498e-9e48-d865b7374384" alt="Catalog Page" width="410"/>
+  <img src="https://github.com/user-attachments/assets/25700c50-fed4-498e-9e48-d865b7374384" alt="Catalog Page" />
 </p>
 
 ### Video Demo
