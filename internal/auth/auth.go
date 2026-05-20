@@ -57,7 +57,12 @@ func ValidateJWT(tokenString, tokenSecret string) (uuid.UUID, string, error) {
 	token, err := jwt.ParseWithClaims(
 		tokenString,
 		&claims,
-		func(token *jwt.Token) (any, error) { return []byte(tokenSecret), nil },
+		func(token *jwt.Token) (any, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, apperror.ErrInvalidSigningMethod
+			}
+			return []byte(tokenSecret), nil
+		},
 	)
 	if err != nil || !token.Valid {
 		// NOTE: maybe return a sentinel error here?
