@@ -32,12 +32,13 @@ var (
 	ErrTapeUnavailable   = errors.New("unavailable tape")
 	ErrMaxRentalsPerUser = errors.New("cannot rent more tapes")
 	// Auth
-	ErrInvalidHeader = errors.New("invalid header")
-	ErrInvalidToken  = errors.New("invalid token")
-	ErrInvalidIssuer = errors.New("invalid issuer")
-	ErrInvalidUserID = errors.New("invalid user id")
-	ErrInvalidUser   = errors.New("invalid user")
-	ErrInvalidAdmin  = errors.New("invalid admin")
+	ErrInvalidHeader        = errors.New("invalid header")
+	ErrInvalidToken         = errors.New("invalid token")
+	ErrInvalidIssuer        = errors.New("invalid issuer")
+	ErrInvalidUserID        = errors.New("invalid user id")
+	ErrInvalidUser          = errors.New("invalid user")
+	ErrInvalidAdmin         = errors.New("invalid admin")
+	ErrInvalidSigningMethod = errors.New("invalid JWT signing method")
 )
 
 type ValidationError struct {
@@ -117,6 +118,8 @@ func mapErrorToAppError(err error) *AppError {
 		return &AppError{Code: http.StatusUnauthorized, Message: "Missing or invalid authorization header"}
 	case errors.Is(err, ErrInvalidToken):
 		return &AppError{Code: http.StatusUnauthorized, Message: "Invalid or expired token"}
+	case errors.Is(err, ErrInvalidSigningMethod):
+		return &AppError{Code: http.StatusUnauthorized, Message: "Invalid JWT signing method"}
 	case errors.Is(err, ErrInvalidIssuer):
 		return &AppError{Code: http.StatusUnauthorized, Message: "Invalid issuer"}
 	case errors.Is(err, ErrInvalidUserID):
