@@ -60,6 +60,7 @@ func (h *UserHandler) CreateUserBatch(c *gin.Context) {
 	createdUsers, existingCount, err := h.userService.CreateUserBatch(c.Request.Context(), newUsers.ToModels())
 	if err != nil {
 		_ = c.Error(err)
+		return
 	}
 
 	batchResponse := UserBatchResponse{

@@ -41,7 +41,7 @@ func (h *TapeHandler) CreateTape(c *gin.Context) {
 		return
 	}
 	createdTape, err := h.tapeService.CreateTape(c.Request.Context(), newTape.ToModel())
-	if createdTape == nil {
+	if err == nil {
 		_ = c.Error(err)
 		return
 	}
@@ -58,6 +58,7 @@ func (h *TapeHandler) CreateTapeBatch(c *gin.Context) {
 	createdTapes, existingCount, err := h.tapeService.CreateTapeBatch(c.Request.Context(), newTapes.ToModels())
 	if err != nil {
 		_ = c.Error(err)
+		return
 	}
 
 	batchResponse := TapeBatchResponse{
@@ -72,6 +73,7 @@ func (h *TapeHandler) GetAllTapes(c *gin.Context) {
 	tapes, err := h.tapeService.GetAllTapes(c.Request.Context())
 	if err != nil {
 		_ = c.Error(err)
+		return
 	}
 	c.JSON(http.StatusOK, TapeListResponse(tapes))
 }
@@ -83,7 +85,7 @@ func (h *TapeHandler) GetTapeByID(c *gin.Context) {
 		_ = c.Error(err)
 		return
 	}
-	c.JSON(http.StatusOK, tape)
+	c.JSON(http.StatusOK, TapeSingleResponse(tape))
 }
 
 func (h *TapeHandler) UpdateTape(c *gin.Context) {
