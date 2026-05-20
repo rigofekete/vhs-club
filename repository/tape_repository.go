@@ -64,6 +64,14 @@ func (r *tapeRepository) Save(ctx context.Context, tape *model.Tape) (*model.Tap
 func (r *tapeRepository) SaveBatch(ctx context.Context, tapes []*model.Tape) ([]*model.Tape, *int32, error) {
 	createdTapes := make([]*model.Tape, 0, len(tapes))
 	existingCount := int32(0)
+
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer tx.Rollback()
+
+	qtx := r.DB.WithTx(tx)
 	for _, tape := range tapes {
 		tapeParams := database.CreateTapeParams{
 			Title:    tape.Title,
@@ -72,7 +80,7 @@ func (r *tapeRepository) SaveBatch(ctx context.Context, tapes []*model.Tape) ([]
 			Quantity: tape.Quantity,
 		}
 
-		dbTape, err := r.DB.CreateTape(ctx, tapeParams)
+		dbTape, err := qtx.CreateTape(ctx, tapeParams)
 		if err != nil {
 			if isUniqueConstraintError(err) {
 				existingCount++
@@ -93,6 +101,10 @@ func (r *tapeRepository) SaveBatch(ctx context.Context, tapes []*model.Tape) ([]
 			Quantity:  dbTape.Quantity,
 		}
 		createdTapes = append(createdTapes, createdTape)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, nil, err
 	}
 
 	return createdTapes, &existingCount, nil

@@ -65,6 +65,14 @@ func (r *userRepository) Save(ctx context.Context, user *model.User) (*model.Use
 func (r *userRepository) SaveBatch(ctx context.Context, users []*model.User) ([]*model.User, *int32, error) {
 	createdUsers := make([]*model.User, 0, len(users))
 	existingCount := int32(0)
+
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer tx.Rollback()
+
+	qtx := r.DB.WithTx(tx)
 	for _, user := range users {
 		userParams := database.CreateUserParams{
 			Username:       user.Username,
@@ -72,7 +80,7 @@ func (r *userRepository) SaveBatch(ctx context.Context, users []*model.User) ([]
 			HashedPassword: user.HashedPassword,
 		}
 
-		dbUser, err := r.DB.CreateUser(ctx, userParams)
+		dbUser, err := qtx.CreateUser(ctx, userParams)
 		if err != nil {
 			if isUniqueConstraintError(err) {
 				existingCount++
@@ -91,6 +99,10 @@ func (r *userRepository) SaveBatch(ctx context.Context, users []*model.User) ([]
 			Email:     dbUser.Email,
 		}
 		createdUsers = append(createdUsers, createdUser)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, nil, err
 	}
 
 	return createdUsers, &existingCount, nil
