@@ -32,6 +32,6 @@ type UserLoginResponse struct {
 }
 
 type UserBatchResponse struct {
-	Users         []UserResponse `json:"tapes"`
+	Users         []UserResponse `json:"users"`
 	AlreadyExists int32          `json:"already_exists"`
 }
