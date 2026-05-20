@@ -61,14 +61,12 @@ func extractToken(c *gin.Context) (uuid.UUID, string, error) {
 	authHeader := c.GetHeader("Authorization")
 	if authHeader == "" {
 		_ = c.Error(apperror.ErrInvalidHeader)
-		c.Abort()
 		return uuid.Nil, "", apperror.ErrInvalidHeader
 	}
 
 	splitAuth := strings.Split(authHeader, " ")
 	if len(splitAuth) != 2 || splitAuth[0] != "Bearer" {
 		_ = c.Error(apperror.ErrInvalidHeader)
-		c.Abort()
 		return uuid.Nil, "", apperror.ErrInvalidHeader
 	}
 
@@ -76,7 +74,6 @@ func extractToken(c *gin.Context) (uuid.UUID, string, error) {
 	userID, role, err := auth.ValidateJWT(tokenString, config.AppConfig.JWTSecret)
 	if err != nil {
 		_ = c.Error(apperror.ErrInvalidToken)
-		c.Abort()
 		return uuid.Nil, "", apperror.ErrInvalidToken
 	}
 	return userID, role, nil
