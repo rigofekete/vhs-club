@@ -178,5 +178,5 @@ func (r *userRepository) DeleteAll(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	return err
+	return nil
 }
