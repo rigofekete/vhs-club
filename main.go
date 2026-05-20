@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +15,6 @@ import (
 func main() {
 	config.Load()
 	router := gin.Default()
-	// router.Use(middleware.CORS())
 	router.Use(apperror.ErrorHandler())
 
 	router.GET("/health", func(c *gin.Context) {
@@ -23,7 +23,6 @@ func main() {
 		})
 	})
 
-	// Dependency Injections
 	userRepository := repository.NewUserRepository()
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
@@ -39,5 +38,5 @@ func main() {
 	rentalHandler := handler.NewRentalHandler(rentalService)
 	rentalHandler.RegisterRoutes(router)
 
-	_ = router.Run(":8080")
+	log.Fatal(router.Run(":8080"))
 }
