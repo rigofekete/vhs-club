@@ -12,6 +12,7 @@ import (
 type RentalService interface {
 	RentTape(ctx context.Context, tapeID string, userID string) (*model.Rental, error)
 	ReturnTape(ctx context.Context, userID, rentalID string) error
+	GetMyActiveRentals(ctx context.Context, userID, rentalID string) error
 	GetAllActiveRentals(ctx context.Context) ([]*model.Rental, error)
 	DeleteAllRentals(ctx context.Context) error
 }

@@ -26,6 +26,7 @@ func (h *RentalHandler) RegisterRoutes(r *gin.Engine) {
 	{
 		user.POST("/:id", h.CreateRental)
 		user.PATCH("/:id", h.ReturnRental)
+		user.GET("/", h.GetMyActiveRentals)
 	}
 
 	admin := r.Group("/api/rentals")
