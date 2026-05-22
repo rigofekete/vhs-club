@@ -13,6 +13,7 @@ import (
 type RentalRepository interface {
 	Save(ctx context.Context, tapeID, userID int32) (*model.Rental, error)
 	ReturnTape(ctx context.Context, rentalID uuid.UUID, userID int32) error
+	GetUserActive(ctx context.Context, userID int32) ([]*model.Rental, error)
 	GetAllActive(ctx context.Context) ([]*model.Rental, error)
 	GetActiveRentCountByTape(ctx context.Context, tapeID int32) (*int64, error)
 	GetActiveRentCountByUser(ctx context.Context, userID int32) (*int64, error)
@@ -66,6 +67,29 @@ func (r *rentalRepository) ReturnTape(ctx context.Context, rentalID uuid.UUID, u
 	}
 
 	return r.DB.ReturnTape(ctx, rental.ID)
+}
+
+func (r *rentalRepository) GetUserActive(ctx context.Context, userID int32) ([]*model.Rental, error) {
+	dbRentals, err := r.DB.GetUserActiveRentals(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	rentals := make([]*model.Rental, 0)
+	for _, rental := range dbRentals {
+		r := &model.Rental{
+			ID:        rental.ID,
+			PublicID:  rental.PublicID,
+			CreatedAt: rental.CreatedAt,
+			UserID:    rental.UserID,
+			TapeID:    rental.TapeID,
+			TapeTitle: rental.Title,
+			Username:  rental.Username,
+			RentedAt:  rental.RentedAt,
+		}
+		rentals = append(rentals, r)
+	}
+	return rentals, err
 }
 
 func (r *rentalRepository) GetAllActive(ctx context.Context) ([]*model.Rental, error) {
