@@ -273,6 +273,40 @@ func Test_ReturnTape_UserNotFound(t *testing.T) {
 	mockRentalRepo.AssertExpectations(t)
 }
 
+func Test_GetUserActiveRentals(t *testing.T) {
+	mockRentalRepo := NewRentalMockRepository()
+	mockTapeRepo := NewTapeMockRepository()
+	mockUserRepo := NewUserMockRepository()
+
+	dbRentals := []*model.Rental{
+		{
+			Username: "RonGilbert",
+		},
+		{
+			Username: "JohnCarmack",
+		},
+	}
+
+	ctx := context.Background()
+	userID := int32(32)
+	userUUID := uuid.New()
+	user := &model.User{
+		ID:       userID,
+		PublicID: userUUID,
+	}
+
+	mockUserRepo.On("GetByPublicID", ctx, userUUID).Return(user, nil)
+	mockRentalRepo.On("GetUserActive", ctx, user.ID).Return(dbRentals, nil)
+
+	svc := service.NewRentalService(mockRentalRepo, mockTapeRepo, mockUserRepo)
+	rentals, err := svc.GetUserActiveRentals(ctx, userUUID.String())
+
+	assert.Nil(t, err)
+	assert.Equal(t, dbRentals, rentals)
+
+	mockRentalRepo.AssertExpectations(t)
+}
+
 func Test_GetAllActiveRentals(t *testing.T) {
 	mockRentalRepo := NewRentalMockRepository()
 	mockTapeRepo := NewTapeMockRepository()
