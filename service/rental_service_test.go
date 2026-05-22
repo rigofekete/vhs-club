@@ -33,6 +33,14 @@ func (m *mockRentalRepository) ReturnTape(ctx context.Context, rentalID uuid.UUI
 	return args.Error(0)
 }
 
+func (m *mockRentalRepository) GetUserActive(ctx context.Context, userID int32) ([]*model.Rental, error) {
+	args := m.Called(ctx, userID)
+	if rentals := args.Get(0); rentals != nil {
+		return rentals.([]*model.Rental), args.Error(1)
+	}
+	return nil, args.Error(1)
+}
+
 func (m *mockRentalRepository) GetAllActive(ctx context.Context) ([]*model.Rental, error) {
 	args := m.Called(ctx)
 	if rentals := args.Get(0); rentals != nil {
