@@ -12,7 +12,7 @@ import (
 type RentalService interface {
 	RentTape(ctx context.Context, tapeID string, userID string) (*model.Rental, error)
 	ReturnTape(ctx context.Context, userID, rentalID string) error
-	GetMyActiveRentals(ctx context.Context, userID, rentalID string) error
+	GetUserActiveRentals(ctx context.Context, userID string) ([]*model.Rental, error)
 	GetAllActiveRentals(ctx context.Context) ([]*model.Rental, error)
 	DeleteAllRentals(ctx context.Context) error
 }
@@ -92,6 +92,20 @@ func (s *rentalService) ReturnTape(ctx context.Context, userPublicID, rentalPubl
 	}
 
 	return s.rentalRepo.ReturnTape(ctx, rentalUUID, user.ID)
+}
+
+func (s *rentalService) GetUserActiveRentals(ctx context.Context, userPublicID string) ([]*model.Rental, error) {
+	userUUID, err := uuid.Parse(userPublicID)
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := s.userRepo.GetByPublicID(ctx, userUUID)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.rentalRepo.GetUserActive(ctx, user.ID)
 }
 
 func (s *rentalService) GetAllActiveRentals(ctx context.Context) ([]*model.Rental, error) {
