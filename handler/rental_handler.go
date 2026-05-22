@@ -18,20 +18,23 @@ func NewRentalHandler(s service.RentalService) *RentalHandler {
 }
 
 func (h *RentalHandler) RegisterRoutes(r *gin.Engine) {
-	app := r.Group("/api/rentals")
-	app.GET("/", h.GetAllActiveRentals)
+	// app := r.Group("/api/rentals")
+	// app.GET("/", h.GetAllActiveRentals)
 
 	user := r.Group("/api/rentals")
 	user.Use(middleware.UserAuth())
 	{
 		user.POST("/:id", h.CreateRental)
 		user.PATCH("/:id", h.ReturnRental)
+		user.GET("/:id", h.GetUserActiveRentals)
+		user.GET("/user", h.GetAllActiveRentals)
 	}
 
 	admin := r.Group("/api/rentals")
 	admin.Use(middleware.AdminAuth())
 	{
 		admin.DELETE("/", h.DeleteAllRentals)
+		admin.GET("/all", h.GetAllActiveRentals)
 	}
 }
 
@@ -66,6 +69,20 @@ func (h *RentalHandler) ReturnRental(c *gin.Context) {
 	}
 
 	c.Status(http.StatusNoContent)
+}
+
+func (h *RentalHandler) GetUserActiveRentals(c *gin.Context) {
+	publicID, ok := middleware.GetUserID(c)
+	if !ok {
+		_ = c.Error(apperror.ErrUserFieldValidation)
+		return
+	}
+	rentals, err := h.rentalService.GetUserActiveRentals(c.Request.Context(), publicID.String())
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+	c.JSON(http.StatusOK, RentalListResponse(rentals))
 }
 
 func (h *RentalHandler) GetAllActiveRentals(c *gin.Context) {

@@ -19,9 +19,12 @@ func NewTapeHandler(s service.TapeService) *TapeHandler {
 }
 
 func (h *TapeHandler) RegisterRoutes(r *gin.Engine) {
-	app := r.Group("/api/tapes")
-	app.GET("/", h.GetAllTapes)
-	app.GET("/:id", h.GetTapeByID)
+	user := r.Group("/api/tapes")
+	user.Use(middleware.UserAuth())
+	{
+		user.GET("/", h.GetAllTapes)
+		user.GET("/:id", h.GetTapeByID)
+	}
 
 	admin := r.Group("/api/tapes")
 	admin.Use(middleware.AdminAuth())

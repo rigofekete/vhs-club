@@ -250,6 +250,63 @@ func (q *Queries) GetAllActiveRentals(ctx context.Context) ([]GetAllActiveRental
 	return items, nil
 }
 
+const getUserActiveRentals = `-- name: GetUserActiveRentals :many
+SELECT
+  rentals.id, rentals.public_id, rentals.created_at, rentals.user_id, rentals.tape_id, rentals.rented_at, rentals.returned_at,
+  tapes.title,
+  users.username
+FROM rentals
+JOIN tapes ON rentals.tape_id = tapes.id
+JOIN users ON rentals.user_id = users.id
+WHERE rentals.returned_at IS NULL AND rentals.user_id = $1
+ORDER BY rentals.created_at ASC
+`
+
+type GetUserActiveRentalsRow struct {
+	ID         int32
+	PublicID   uuid.UUID
+	CreatedAt  time.Time
+	UserID     int32
+	TapeID     int32
+	RentedAt   time.Time
+	ReturnedAt sql.NullTime
+	Title      string
+	Username   string
+}
+
+func (q *Queries) GetUserActiveRentals(ctx context.Context, userID int32) ([]GetUserActiveRentalsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getUserActiveRentals, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetUserActiveRentalsRow
+	for rows.Next() {
+		var i GetUserActiveRentalsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.PublicID,
+			&i.CreatedAt,
+			&i.UserID,
+			&i.TapeID,
+			&i.RentedAt,
+			&i.ReturnedAt,
+			&i.Title,
+			&i.Username,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const returnTape = `-- name: ReturnTape :exec
 UPDATE rentals
 SET returned_at = NOW()

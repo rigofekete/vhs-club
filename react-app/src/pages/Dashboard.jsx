@@ -31,7 +31,11 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('api/tapes');
+        const response = await fetch('api/tapes', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
         if (!response.ok) {
           const errData = await response.json();
           let errorMsg = errData.error || 'Failed to fetch tapes';
@@ -69,7 +73,11 @@ function Dashboard() {
 
   const fetchRentals = async () => {
     try {
-      const response = await fetch('api/rentals');
+      const response = await fetch('api/rentals/user', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
       if (!response.ok) return;
       const data = await response.json();
       setRentals(data.filter(r => r.username === username));

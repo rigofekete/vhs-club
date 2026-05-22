@@ -46,6 +46,17 @@ WHERE tape_id = $1 AND returned_at IS NULL;
 SELECT COUNT(*) FROM rentals
 WHERE tape_id = $1 AND returned_at IS NULL;
 
+-- name: GetUserActiveRentals :many
+SELECT
+  rentals.*,
+  tapes.title,
+  users.username
+FROM rentals
+JOIN tapes ON rentals.tape_id = tapes.id
+JOIN users ON rentals.user_id = users.id
+WHERE rentals.returned_at IS NULL AND rentals.user_id = $1
+ORDER BY rentals.created_at ASC;
+
 -- name: GetAllActiveRentals :many
 SELECT
   rentals.*,
