@@ -43,7 +43,7 @@ func (r *tapeRepository) Save(ctx context.Context, tape *model.Tape) (*model.Tap
 		Quantity: tape.Quantity,
 	}
 
-	dbTape, err := r.DB.CreateTape(context.Background(), tapeParams)
+	dbTape, err := r.DB.CreateTape(ctx, tapeParams)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +111,7 @@ func (r *tapeRepository) SaveBatch(ctx context.Context, tapes []*model.Tape) ([]
 }
 
 func (r *tapeRepository) GetAll(ctx context.Context) ([]*model.Tape, error) {
-	dbTapes, err := r.DB.GetTapes(context.Background())
+	dbTapes, err := r.DB.GetTapes(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +133,7 @@ func (r *tapeRepository) GetAll(ctx context.Context) ([]*model.Tape, error) {
 }
 
 func (r *tapeRepository) GetByID(ctx context.Context, id int32) (*model.Tape, error) {
-	dbTape, err := r.DB.GetTapeByID(context.Background(), id)
+	dbTape, err := r.DB.GetTapeByID(ctx, id)
 	if err != nil {
 		return nil, apperror.ErrTapeNotFound
 	}
@@ -179,7 +179,7 @@ func (r *tapeRepository) Update(ctx context.Context, updateTape *model.UpdateTap
 		Quantity: toNullInt32(updateTape.Quantity),
 	}
 
-	dbTape, err := r.DB.UpdateTape(context.Background(), dbUpdateParams)
+	dbTape, err := r.DB.UpdateTape(ctx, dbUpdateParams)
 	if err != nil {
 		return nil, err
 	}
@@ -199,7 +199,7 @@ func (r *tapeRepository) Update(ctx context.Context, updateTape *model.UpdateTap
 }
 
 func (r *tapeRepository) Delete(ctx context.Context, id int32) error {
-	err := r.DB.DeleteTape(context.Background(), id)
+	err := r.DB.DeleteTape(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -207,7 +207,7 @@ func (r *tapeRepository) Delete(ctx context.Context, id int32) error {
 }
 
 func (r *tapeRepository) DeleteAll(ctx context.Context) error {
-	err := r.DB.DeleteAllTapes(context.Background())
+	err := r.DB.DeleteAllTapes(ctx)
 	if err != nil {
 		return err
 	}
