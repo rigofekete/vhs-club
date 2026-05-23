@@ -80,7 +80,7 @@ function Dashboard() {
       });
       if (!response.ok) return;
       const data = await response.json();
-      setRentals(data.filter(r => r.username === username));
+      setRentals(data);
     } catch (err) {
       setError('Unable to fetch rentals.');
     }
