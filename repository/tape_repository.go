@@ -35,7 +35,6 @@ func NewTapeRepository() TapeRepository {
 }
 
 func (r *tapeRepository) Save(ctx context.Context, tape *model.Tape) (*model.Tape, error) {
-	// TODO: Consider doing a function to convert data to and from DAO (similar to the DTO in handler layer)
 	tapeParams := database.CreateTapeParams{
 		Title:    tape.Title,
 		Director: tape.Director,
