@@ -7,6 +7,12 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/rigofekete/vhs-club/actions">
+    <img src="https://github.com/rigofekete/vhs-club/actions/workflows/ci.yml/badge.svg" alt="Build Status" />
+  </a>
+</p>
+
+<p align="center">
   <a href="#features">Features</a> •
   <a href="#tech-stack">Tech Stack</a> •
   <a href="#demo">Demo</a> •
