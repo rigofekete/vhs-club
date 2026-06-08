@@ -82,7 +82,7 @@ function Dashboard() {
       const data = await response.json();
       setRentals(data);
     } catch (err) {
-      setError('Unable to fetch rentals.');
+      setError(`Unable to fetch rentals: ${err.message}`);
     }
   };
 
@@ -103,7 +103,7 @@ function Dashboard() {
 
       setView('renting');
     } catch (err) {
-      setError('Unable to connect to the server.');
+      setError(`Unable to connect to the server: ${err.message}`)
     }
   };
 
@@ -126,7 +126,7 @@ function Dashboard() {
       // TODO: create a new view with animation for rental return
       setView('renting')
     } catch (err) {
-      setError('Unable to connect to the server.');
+      setError(`Unable to connect to the server: ${err.message}`)
     }
   };
 
