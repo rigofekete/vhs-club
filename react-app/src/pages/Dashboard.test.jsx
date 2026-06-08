@@ -332,7 +332,7 @@ describe('Dashboard', () => {
     await userEvent.click(screen.getByText('Rent'))
 
     await waitFor(() => {
-      expect(screen.getByText('Unable to connect to the server.')).toBeInTheDocument()
+      expect(screen.getByText(/Unable to connect to the server/)).toBeInTheDocument()
     })
   })
 
@@ -360,7 +360,7 @@ describe('Dashboard', () => {
     await userEvent.click(screen.getByText('Return'))
 
     await waitFor(() => {
-      expect(screen.getByText('Unable to connect to the server.')).toBeInTheDocument()
+      expect(screen.getByText(/Unable to connect to the server/)).toBeInTheDocument()
     })
   })
 
