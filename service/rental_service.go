@@ -59,7 +59,7 @@ func (s *rentalService) RentTape(ctx context.Context, tapePublicID, userPublicID
 		return nil, err
 	}
 
-	if int32(*countByTape) >= tape.Quantity {
+	if *countByTape >= int64(tape.Quantity) {
 		return nil, apperror.ErrTapeUnavailable
 	}
 
@@ -68,7 +68,7 @@ func (s *rentalService) RentTape(ctx context.Context, tapePublicID, userPublicID
 		return nil, err
 	}
 
-	if int32(*countByUser) >= maxRentalsPerUser {
+	if *countByUser >= maxRentalsPerUser {
 		return nil, apperror.ErrMaxRentalsPerUser
 	}
 
